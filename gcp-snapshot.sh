@@ -128,6 +128,10 @@ do
             read PROJECT_ID  
             echo ''
 
+            echo -n 'Introduce una región válida: '
+            read REGION
+            echo ''
+
             echo -n 'Introduce una zona válida: '
             read ZONE
             echo ''
@@ -140,20 +144,21 @@ do
             read INSTANCE_NAME
             echo ''
 
-            echo -n 'Introduce el nombre de la red VPC: '
-            read VPC
+            echo 'Hint: utiliza el siguiente comando para ver los tipos de máquina disponibles en la región/zona:'
+            echo "gcloud compute machine-types list --filter=\"zone:( $ZONE )\""
+            echo -n 'Introduce el tipo de máquina: '
+            read MACHINE_TYPE
             echo ''
 
-            echo -n 'Introduce el nombre de la subred: '
-            read SUBNETWORK
-            SUBNETURI=$(gcloud compute networks subnets list --network=$VPC --uri | grep $SUBNETWORK)
+            echo -n 'Introduce el nombre de la red subred: '
+            read SUBRED
             echo ''
 
             echo -n 'Introduce la dirección IP estática de la máquina: '
             read IP_ADDRESS
             echo ''
 
-            gcloud compute instances create $INSTANCE_NAME --zone=$ZONE --subnet=$SUBNETURI --private-network-ip=$IP_ADDRESS --disk=name=$DISK_NAME,device-name=$DISK_NAME,mode=rw,boot=yes,auto-delete=no --project=$PROJECT_ID
+            gcloud compute instances create $INSTANCE_NAME --zone=$ZONE --subnet=projects/$PROJECT_ID/regions/$REGION/subnetworks/$SUBRED --private-network-ip=$IP_ADDRESS --no-address --machine-type=$MACHINE_TYPE --disk=name=$DISK_NAME,device-name=$DISK_NAME,mode=rw,boot=yes,auto-delete=no --project=$PROJECT_ID
             ;;
             
             s) break
