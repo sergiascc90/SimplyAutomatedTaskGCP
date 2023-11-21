@@ -6,8 +6,10 @@ do
     clear
     echo '*********** Menú operaciones GCP ***********'
     echo '1 - Realizar instantánea'
-    echo '2 - Crear disco desde instantánea'
-    echo '3 - Crear instancia de Compute Engine'
+    echo '2 - Realizar imagen de disco'
+    echo '3 - Realizar imagen de maquina'
+    echo '4 - Crear disco desde instantánea'
+    echo '5 - Crear instancia de Compute Engine'
     echo 's - Salir'
     echo ''
     echo ''
@@ -18,6 +20,7 @@ do
 
     case $option in
     
+    #Realizar instantánea
     1) echo '*********** Realizar instantánea ***********'
     while :
         do
@@ -32,6 +35,7 @@ do
         clear
 
         case $opt2 in
+        #Instantánea tradicional
         1) echo 'Se realizará una instantánea normal. Por favor, responda a las siguientes preguntas: '
             echo  -n 'Introduce el proyecto que estas usando: '
             read PROJECT_ID
@@ -54,6 +58,8 @@ do
             read DISK_NAME
             gcloud compute snapshots create $SNAP_NAME --project=$PROJECT_ID --source-disk=$DISK_NAME --source-disk-zone=$ZONE --storage-location=$REGION
             ;;
+        
+        #Instantánea con VSS habilitado (SO Windows)    
         2) echo 'Se realizará una instantánea con VSS habilitado. Por favor, responda a las siguientes preguntas:'
             echo  -n 'Introduce el proyecto que estas usando: '
             read PROJECT_ID
@@ -82,7 +88,14 @@ do
         esac
         done
     ;;
-    2) echo '*********** Crear disco desde instantánea ***********'
+
+    #Crear imagen de máquina
+    3) echo '*********** Crear imagen de máquina ***********'
+        
+    ;;
+
+    #Crear disco desde una instantánea
+    4) echo '*********** Crear disco desde instantánea ***********'
     echo  -n 'Introduce el proyecto que estas usando: '
     read PROJECT_ID
     echo ''
@@ -111,11 +124,13 @@ do
     gcloud compute disks create $DISK_NAME --project=$PROJECT_ID --type=$DISK_TYPE --size=$DISK_SIZE --zone=$ZONE --source-snapshot=$SNAP_NAME
     ;;
 
-    3) echo '*********** Crear instancia de Compute Engine ***********'
+    #Creación de instancias de Compute Engine
+    5) echo '*********** Crear instancia de Compute Engine ***********'
     while :
         do
         echo '¿Qué deseas hacer?'
         echo '1 - Crear una instancia desde un disco'
+        echo '2 - Crear una instancia nueva'
         echo 's - Volver al menú principal'
         echo -n 'Selecciona una opción: '
         read opt3

@@ -1,6 +1,6 @@
 !/bin/bash
 
-PROJECT_ID=() #Rellenar con el Project ID entre comillas simples
+PROJECT_ID=('prj-p-mexico' 'prj-p-colombia' 'prj-p-espana') #Rellenar con el Project ID entre comillas simples
 #Para obtenerlos, ejecutar el siguiente comando gcloud projects list --filter="gcp1"
 
 for project in "${PROJECT_ID[@]}"
